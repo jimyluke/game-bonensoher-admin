@@ -1,4 +1,5 @@
 import defaultSettings from '@/settings'
+import Settings from '@/api/settings';
 
 const { showSettings, fixedHeader, sidebarLogo } = defaultSettings
 
@@ -20,6 +21,26 @@ const mutations = {
 const actions = {
   changeSetting({ commit }, data) {
     commit('CHANGE_SETTING', data)
+  },
+
+  loadSettings({ commit, state }, settings) {
+    return new Promise((resolve, reject) => {
+      Settings.getSettings(settings).then(() => {
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  updateSettings({ commit, state}, settings) {
+    return new Promise((resolve, reject) => {
+      Settings.updateSettings(settings).then(() => {
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
   }
 }
 
