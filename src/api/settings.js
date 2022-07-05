@@ -13,7 +13,8 @@ class SettingsApi {
       url: '/update-settings',
       method: 'post',
       data: {
-        settings: settings
+        settings: settings,
+        timestamp: new Date().getTime()
       }
     })
   }

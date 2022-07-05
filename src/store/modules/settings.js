@@ -25,8 +25,8 @@ const actions = {
 
   loadSettings({ commit, state }, settings) {
     return new Promise((resolve, reject) => {
-      Settings.getSettings(settings).then(() => {
-        resolve()
+      Settings.getSettings(settings).then( response => {
+        resolve(response)
       }).catch(error => {
         reject(error)
       })
@@ -35,8 +35,8 @@ const actions = {
 
   updateSettings({ commit, state}, settings) {
     return new Promise((resolve, reject) => {
-      Settings.updateSettings(settings).then(() => {
-        resolve()
+      Settings.updateSettings(settings).then( response => {
+        resolve(response)
       }).catch(error => {
         reject(error)
       })

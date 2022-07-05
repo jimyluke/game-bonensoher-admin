@@ -3,7 +3,7 @@
     <div class="gs-fixed">
       <h3>Game Settings</h3>
 
-      <el-form ref="form" :model="settings" label-width="180px" label-position="left">
+      <el-form ref="form" :model="settings" label-width="180px" label-position="left" v-loading="loading">
         <el-form-item label="Game Lock">
           <el-switch v-model="settings.game_lock"></el-switch>
         </el-form-item>
@@ -20,7 +20,7 @@
           <el-input v-model="settings.percent_of_user_paid"></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="saveChange">Save Change</el-button>
+          <el-button type="primary" @click="saveChange" :loading="saving">Save Change</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -28,11 +28,14 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from 'vuex';
+import _ from 'lodash';
+
 export default {
   data(){
     return {
       loading: false,
+      saving: false,
       settings: {
         game_lock: false,
         wake_percent: 66,
@@ -54,15 +57,23 @@ export default {
     }),
 
     loadGameSettings(){
-      this.loadSettings();
-    },
-
-    saveChange(){
       this.loading = true;
-      this.updateSettings(this.settings).then( res => {
+      this.loadSettings().then( res => {
+        if(!_.isEmpty(res.game_settings)){
+          this.settings = Object.assign({}, this.settings, res.game_settings);
+        }
         this.loading = false;
       }).catch( error => {
         this.loading = false;
+      });
+    },
+
+    saveChange(){
+      this.saving = true;
+      this.updateSettings(this.settings).then( res => {
+        this.saving = false;
+      }).catch( error => {
+        this.saving = false;
       });
     }
   }
