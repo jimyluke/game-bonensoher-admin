@@ -1,7 +1,29 @@
 <template>
   <div class="app-container" v-loading="loading">
-    <h3>Game Info</h3>
-    <json-viewer :value="current_game"></json-viewer>
+    <div class="heading display-flex">
+      <h3>Game Info</h3>
+      <el-button icon="el-icon-refresh" size="small" @click="checkGame()" v-if="!current_game.end">Refresh Results</el-button>
+    </div>
+
+    <div class="game-info">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <span>NoRakePrizePool</span>: <strong>{{ current_game.data.NoRakePrizePool | currency }}</strong><br />
+          <span>PostRakePrizePool</span>: <strong>{{ current_game.data.PostRakePrizePool | currency }}</strong><br />
+          <span>entry_total</span>: <strong>{{ current_game.data.entry_total }}</strong><br />
+          <span>ticket_total</span>: <strong>{{ current_game.data.ticket_total }}</strong><br />
+          <span>user_total</span>: <strong>{{ current_game.data.user_total }}</strong><br />
+          <span>EstUsers</span>: <strong>{{ current_game.data.EstUsers }}</strong><br />
+          <span>EstRakePerDay</span>: <strong>{{ current_game.data.EstRakePerDay | currency}}</strong>
+        </el-col>
+        <el-col :span="12">
+          Status: <el-tag :type="current_game.end?'danger':'success'">{{ current_game.end? 'Ended': 'Running' }}</el-tag><br />
+          Created At: {{ current_game.created_at | moment("YYYY-MM-DD HH:MM:SS") }}
+        </el-col>
+      </el-row>
+    </div>
+
+    <!-- <json-viewer :value="current_game"></json-viewer> -->
     <!-- {{current_game}} -->
     <!-- {{game_player}} -->
 
@@ -119,7 +141,8 @@ export default {
 
   methods: {
     ...mapActions({
-      loadGameInfo: 'game/loadGameInfo'
+      loadGameInfo: 'game/loadGameInfo',
+      checkCurrentGame: 'game/checkGame'
     }),
 
     load(){
@@ -129,6 +152,19 @@ export default {
       }).catch( error => {
         this.loading = false;
       })
+    },
+
+    checkGame(){
+      let game_id = parseInt(this.gameId);
+      this.checkCurrentGame(game_id).then( res => {
+        this.load();
+        this.$message({
+          message: 'Refreshed results..',
+          type: 'success'
+        });
+      }).catch( error => {
+
+      });
     }
   }
 }

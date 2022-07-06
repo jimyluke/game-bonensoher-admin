@@ -16,6 +16,14 @@ class GameApi {
     })
   }
 
+  checkGame(data){
+    return request({
+      url: `/game/check`,
+      method: 'post',
+      data
+    })
+  }
+
   initNewGameAll(){
     return request({
       url: '/game/create-game-for-all-user',

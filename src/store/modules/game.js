@@ -48,6 +48,17 @@ const actions = {
     })
   },
 
+  checkGame({commit, state}, game_id){
+    const data = {game_id: game_id};
+    return new Promise((resolve, reject) => {
+      Game.checkGame(data).then( response => {
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
   initNewGameAll({ commit, state }){
     return new Promise((resolve, reject) => {
       Game.initNewGameAll().then( response => {

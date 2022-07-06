@@ -11,51 +11,63 @@
       </el-table-column>
       <el-table-column
         label="#"
-        prop="id">
+        prop="id" width="80">
         <template slot-scope="scope">
           <router-link :to="`/games/${scope.row.id}`">#{{ scope.row.id }}</router-link>
         </template>
       </el-table-column>
       <el-table-column
+        label="Game Data">
+        <template slot-scope="scope">
+          <span>NoRakePrizePool</span>: <strong>{{ scope.row.data.NoRakePrizePool | currency }}</strong>,
+          <span>PostRakePrizePool</span>: <strong>{{ scope.row.data.PostRakePrizePool | currency }}</strong>,
+          <span>entry_total</span>: <strong>{{ scope.row.data.entry_total }}</strong>,
+          <span>ticket_total</span>: <strong>{{ scope.row.data.ticket_total }}</strong>,
+          <span>user_total</span>: <strong>{{ scope.row.data.user_total }}</strong>,
+          <span>EstUsers</span>: <strong>{{ scope.row.data.EstUsers }}</strong>,
+          <span>EstRakePerDay</span>: <strong>{{ scope.row.data.EstRakePerDay | currency}}</strong>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="Result"
-        prop="result">
+        prop="result" width="80">
       </el-table-column>
       <el-table-column
         label="Raked"
-        prop="raked">
+        prop="raked" width="100">
         <template slot-scope="scope">
           {{ scope.row.raked? scope.row.raked: 0 | currency }}
         </template>
       </el-table-column>
       <el-table-column
         label="Back pot"
-        prop="back_pot">
+        prop="back_pot" width="120">
         <template slot-scope="scope">
           {{ scope.row.back_pot? scope.row.back_pot: 0 | currency }}
         </template>
       </el-table-column>
       <el-table-column
         label="Thieves count"
-        prop="thieves_count">
+        prop="thieves_count" width="130">
         <template slot-scope="scope">
           {{ scope.row.thieves_count? scope.row.thieves_count: 0 }}
         </template>
       </el-table-column>
       <el-table-column
         label="Status"
-        prop="end">
+        prop="end" width="100">
         <template slot-scope="scope">
           <el-tag :type="scope.row.end?'danger':'success'">{{ scope.row.end? 'Ended': 'Running' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Action">
+      <el-table-column label="Action" width="120">
         <template slot-scope="scope">
-          <el-button icon="el-icon-refresh" circle size="small"></el-button>
+          <el-button icon="el-icon-refresh" circle size="small" @click="checkGame(scope.row.id)" v-if="!scope.row.end"></el-button>
         </template>
       </el-table-column>
       <el-table-column
         label="Created At (UTC)"
-        prop="created_at">
+        prop="created_at" width="165">
         <template slot-scope="scope">
           {{ scope.row.created_at | moment("YYYY-MM-DD HH:MM:SS") }}
         </template>
@@ -91,11 +103,25 @@ export default {
 
   methods: {
     ...mapActions({
-      loadHistory: 'game/loadHistory'
+      loadHistory: 'game/loadHistory',
+      checkCurrentGame: 'game/checkGame'
     }),
 
     load(){
       this.loadHistory();
+    },
+
+    checkGame(game_id){
+      game_id = parseInt(game_id);
+      this.checkCurrentGame(game_id).then( res => {
+        this.load();
+        this.$message({
+          message: 'Refreshed results..',
+          type: 'success'
+        });
+      }).catch( error => {
+
+      });
     }
   }
 }

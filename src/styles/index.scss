@@ -77,3 +77,13 @@ div:focus {
 body .jv-container .jv-code {
   padding: 0px;
 }
+
+.display-flex{
+  display: flex;
+}
+
+.heading.display-flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
