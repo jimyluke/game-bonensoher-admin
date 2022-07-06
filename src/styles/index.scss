@@ -69,3 +69,11 @@ div:focus {
   max-width: 800px;
   margin: 0 auto;
 }
+
+.el-table__expanded-cell[class*=cell] {
+  padding: 10px 10px;
+}
+
+body .jv-container .jv-code {
+  padding: 0px;
+}

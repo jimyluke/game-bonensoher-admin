@@ -8,6 +8,20 @@ class GameApi {
       params
     })
   }
+
+  loadGameInfo(game_id){
+    return request({
+      url: `/game-info/${game_id}`,
+      method: 'get'
+    })
+  }
+
+  initNewGameAll(){
+    return request({
+      url: '/game/create-game-for-all-user',
+      method: 'post'
+    })
+  }
 }
 
 const Game = new GameApi()

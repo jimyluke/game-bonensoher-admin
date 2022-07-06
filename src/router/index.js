@@ -56,15 +56,28 @@ export const constantRoutes = [
   },
 
   {
-    path: '/game-history',
+    path: '/games',
     component: Layout,
     meta: { title: 'Game History', icon: 'el-icon-s-claim' },
     children: [{
-      path: 'list',
-      name: 'GameHistory',
-      component: () => import('@/views/game-history/index'),
-      meta: { title: 'Game History' }
-    }]
+        path: 'list',
+        name: 'GameHistory',
+        component: () => import('@/views/game/index'),
+        meta: { title: 'Game History' }
+      },
+      {
+        path: 'simulator',
+        name: 'GameSimulator',
+        component: () => import('@/views/game/Simulator'),
+        meta: { title: 'Game Simulator' }
+      },
+      {
+        path: ':game_id',
+        name: 'Game',
+        component: () => import('@/views/game/SingleGame'),
+        meta: { title: 'Game' },
+        hidden: true
+      }]
   },
 
   {
