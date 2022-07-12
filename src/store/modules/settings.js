@@ -1,12 +1,17 @@
 import defaultSettings from '@/settings'
 import Settings from '@/api/settings';
+import Solana from '@/api/solana';
 
 const { showSettings, fixedHeader, sidebarLogo } = defaultSettings
 
 const state = {
   showSettings: showSettings,
   fixedHeader: fixedHeader,
-  sidebarLogo: sidebarLogo
+  sidebarLogo: sidebarLogo,
+  solana: {
+    wallets: [],
+    settings: {}
+  }
 }
 
 const mutations = {
@@ -15,6 +20,14 @@ const mutations = {
     if (state.hasOwnProperty(key)) {
       state[key] = value
     }
+  },
+
+  SET_SOLANA_WALLETS: (state, payload) => {
+    state.solana.wallets = payload;
+  },
+
+  SET_SOLANA_SETTINGS: (state, payload) => {
+    state.solana.settings = payload;
   }
 }
 
@@ -36,6 +49,49 @@ const actions = {
   updateSettings({ commit, state}, settings) {
     return new Promise((resolve, reject) => {
       Settings.updateSettings(settings).then( response => {
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  updateSolanaSettings({ commit, state}, settings) {
+    return new Promise((resolve, reject) => {
+      Solana.updateSettings(settings).then( response => {
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  generateSolanaWallet(){
+    return new Promise((resolve, reject) => {
+      Solana.generateWallet().then( response => {
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  loadSolanaWallets({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      Solana.loadWallets().then( response => {
+        commit('SET_SOLANA_WALLETS', response.walles);
+        commit('SET_SOLANA_SETTINGS', response.settings);
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  setPrimaryWallet({commit, state}, id){
+    return new Promise((resolve, reject) => {
+      const data_send = {id: id};
+      Solana.setPrimaryWallet(data_send).then( response => {
         resolve(response)
       }).catch(error => {
         reject(error)

@@ -95,12 +95,19 @@ export const constantRoutes = [
   {
     path: '/settings',
     component: Layout,
+    meta: { title: 'Settings', icon: 'el-icon-s-tools' },
     children: [
       {
         path: 'main',
-        name: 'Settings',
+        name: 'GameSettings',
         component: () => import('@/views/settings/main'),
-        meta: { title: 'Settings', icon: 'el-icon-s-tools' }
+        meta: { title: 'Games' }
+      },
+      {
+        path: 'solana',
+        name: 'Solana',
+        component: () => import('@/views/settings/solana'),
+        meta: { title: 'Solana' }
       }
     ]
   },

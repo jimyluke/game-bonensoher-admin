@@ -48,6 +48,10 @@ div:focus {
   outline: none;
 }
 
+.inline-block{
+  display: inline-block;
+}
+
 .clearfix {
   &:after {
     visibility: hidden;
@@ -86,4 +90,12 @@ body .jv-container .jv-code {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.add-wallet-drawer{
+  max-width: 680px;
+
+  .el-drawer__body{
+    padding: 0 20px;
+  }
 }
