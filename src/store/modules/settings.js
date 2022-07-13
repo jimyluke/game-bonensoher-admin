@@ -10,7 +10,19 @@ const state = {
   sidebarLogo: sidebarLogo,
   solana: {
     wallets: [],
+    balance_wallets: {},
     settings: {}
+  }
+}
+
+const getters = {
+  solanaWallets(state){
+    let wallets = [];
+    state.solana.wallets.forEach( wallet => {
+      wallet.balance = state.solana.balance_wallets[wallet.wallet_address];
+      wallets.push(wallet);
+    });
+    return wallets;
   }
 }
 
@@ -28,6 +40,10 @@ const mutations = {
 
   SET_SOLANA_SETTINGS: (state, payload) => {
     state.solana.settings = payload;
+  },
+
+  SET_BALANCE_WALLETS: (state, payload) => {
+    state.solana.balance_wallets = payload;
   }
 }
 
@@ -88,10 +104,41 @@ const actions = {
     })
   },
 
+  getSolanaBalanceWallets({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      Solana.getBalanceWallets().then( response => {
+        commit('SET_BALANCE_WALLETS', response.balance_wallets);
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
   setPrimaryWallet({commit, state}, id){
     return new Promise((resolve, reject) => {
       const data_send = {id: id};
       Solana.setPrimaryWallet(data_send).then( response => {
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  checkSolanaWalletInfo({commit, state}, data_send){
+    return new Promise((resolve, reject) => {
+      Solana.checkWalletInfo(data_send).then( response => {
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  addSolanaWallet({commit, state}, data_send){
+    return new Promise((resolve, reject) => {
+      Solana.addWallet(data_send).then( response => {
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -103,6 +150,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }

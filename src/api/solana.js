@@ -27,9 +27,32 @@ class SolanaApi {
     })
   }
 
+  getBalanceWallets(){
+    return request({
+      url: '/solana/get-balance-wallets',
+      method: 'get'
+    })
+  }
+
   setPrimaryWallet(data){
     return request({
       url: '/solana/set-primary-wallet',
+      method: 'post',
+      data
+    })
+  }
+
+  checkWalletInfo(data){
+    return request({
+      url: '/solana/check-wallet-info',
+      method: 'post',
+      data
+    })
+  }
+
+  addWallet(data){
+    return request({
+      url: '/solana/add-wallet',
       method: 'post',
       data
     })

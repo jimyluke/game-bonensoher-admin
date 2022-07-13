@@ -32,7 +32,7 @@
       <el-row class="wallets">
         <h3>
           <span>Wallets</span>
-          <SolanaAddWalletDrawer />
+          <SolanaAddWalletDrawer @on-success="load" />
           <el-popconfirm
             confirm-button-text='OK'
             cancel-button-text='No, Thanks'
@@ -46,7 +46,7 @@
         </h3>
         <div class="wallets-list" v-loading="loading">
           <el-table
-            :data="wallets_data"
+            :data="wallets_data_bl"
             stripe
             style="width: 100%">
             <el-table-column
@@ -62,7 +62,7 @@
             <el-table-column
               label="Balance (Sol)" width="150">
               <template slot-scope="scope">
-                0
+                <span v-if="checking"><i class="el-icon-loading"></i></span><span v-else>{{ scope.row.balance }}</span>
               </template>
             </el-table-column>
 
@@ -101,7 +101,7 @@ import Vue from 'vue';
 import JsonViewer from 'vue-json-viewer';
 Vue.use(JsonViewer);
 Vue.use(require('vue-moment'));
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import SolanaAddWalletDrawer from './components/SolanaAddWalletDrawer.vue';
 
 export default {
@@ -113,6 +113,7 @@ export default {
         sol_usd_rate: '',
         auto_update_rate: true
       },
+      checking: false,
       loading: false,
       generating: false,
       setting_primary: false
@@ -139,11 +140,16 @@ export default {
   computed: {
     ...mapState({
       wallets_data: state => state.settings.solana.wallets
+    }),
+
+    ...mapGetters({
+      wallets_data_bl: 'settings/solanaWallets'
     })
   },
 
   mounted(){
     this.load();
+    this.checkBalanceWallets();
   },
 
   methods: {
@@ -151,8 +157,18 @@ export default {
       updateSolanaSettings: 'settings/updateSolanaSettings',
       generateSolanaWallet: 'settings/generateSolanaWallet',
       loadWallets: 'settings/loadSolanaWallets',
+      getBalanceWallets: 'settings/getSolanaBalanceWallets',
       setPrimaryWallet: 'settings/setPrimaryWallet',
     }),
+
+    checkBalanceWallets(){
+      this.checking = true;
+      this.getBalanceWallets().then( resp => {
+        this.checking = false;
+      }).catch( error => {
+        this.checking = false;
+      });
+    },
 
     updateSettings(){
       if(!this.solana_settings.auto_update_rate && this.solana_settings.sol_usd_rate === ''){
@@ -160,12 +176,15 @@ export default {
       }
 
       this.updateSolanaSettings(this.solana_settings).then( resp => {
-        console.log(resp);
+        //console.log(resp);
         this.$notify({
           title: 'Success',
           message: 'Settings updated!',
           type: 'success'
         });
+
+        this.load();
+        this.checkBalanceWallets();
       }).catch( error => {
         console.log(error);
       });
