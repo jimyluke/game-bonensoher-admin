@@ -25,7 +25,7 @@
             <template slot="prepend">$</template>
           </el-input>
           <el-checkbox v-model="solana_settings.auto_update_rate" @change="updateSettings">Auto Update</el-checkbox>
-          <span class="description" v-if="solana_settings.auto_update_rate">(Updated 2 times a day 7am,7pm)</span>
+          <span class="description" v-if="solana_settings.auto_update_rate">(Updated every minute)</span>
         </el-col>
       </el-row>
 
@@ -107,7 +107,7 @@ import SolanaAddWalletDrawer from './components/SolanaAddWalletDrawer.vue';
 export default {
   data(){
     return {
-      node_types: ['mainnet', 'mainnet-beta', 'testnet', 'devnet'],
+      node_types: ['mainnet-beta', 'testnet', 'devnet'],
       solana_settings: {
         node_type: 'testnet',
         sol_usd_rate: '',
