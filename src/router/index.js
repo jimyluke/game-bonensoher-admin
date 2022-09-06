@@ -81,6 +81,18 @@ export const constantRoutes = [
   },
 
   {
+    path: '/transactions',
+    component: Layout,
+    meta: { title: 'Transactions', icon: 'el-icon-s-ticket' },
+    children: [{
+      path: 'list',
+      name: 'TransactionsList',
+      component: () => import('@/views/user/index'),
+      meta: { title: 'Transactions' }
+    }]
+  },
+
+  {
     path: '/user',
     component: Layout,
     meta: { title: 'User List', icon: 'el-icon-user-solid' },

@@ -104,3 +104,8 @@ body .jv-container .jv-code {
     padding: 0;
   }
 }
+
+.game-actions button + span{
+  margin-left: 5px;
+  display: inline-block;
+}

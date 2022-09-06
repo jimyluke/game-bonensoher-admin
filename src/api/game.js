@@ -24,6 +24,14 @@ class GameApi {
     })
   }
 
+  endGame(data){
+    return request({
+      url: `/game/end`,
+      method: 'post',
+      data
+    })
+  }
+
   initNewGameAll(){
     return request({
       url: '/game/create-game-for-all-user',
