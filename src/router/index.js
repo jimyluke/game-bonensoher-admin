@@ -87,7 +87,7 @@ export const constantRoutes = [
     children: [{
       path: 'list',
       name: 'TransactionsList',
-      component: () => import('@/views/user/index'),
+      component: () => import('@/views/transaction/IndexList'),
       meta: { title: 'Transactions' }
     }]
   },
